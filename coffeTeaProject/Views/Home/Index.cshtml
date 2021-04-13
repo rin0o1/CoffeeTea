@@ -6,9 +6,16 @@
 
 <script>
 
+    var isWorking = false;
+
     $(document).ready(function () {
         $(".butt").click(function () {
-            var id=$(this).attr('id');
+            var id = $(this).attr('id');
+            if (isWorking) {
+
+                alert("Please, wait your last operation. Your drink is almost ready!");
+                return;
+            }
             Selection(id);
         });
 
@@ -16,6 +23,7 @@
 
 
     function Selection(idRecipe_) {
+        isWorking = true;
         $("#container").empty();
         var Url = "/Home/getStepsFromId";
         var Data = { idReceive: idRecipe_ };
@@ -52,7 +60,7 @@
             appendToContainer(description);            
         }
 
-        setTimeout(function () { appendToContainer("YOUR DRINK IS READY!"); }, 1000);
+        setTimeout(function () { appendToContainer("YOUR DRINK IS READY!"); isWorking = false; }, 1000);
         
     }
 
