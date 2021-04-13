@@ -1,0 +1,86 @@
+﻿
+@using DataUtilities.ViewModel
+
+@model List<Model_Recipe>
+
+
+<script>
+
+    $(document).ready(function () {
+        $(".butt").click(function () {
+            var id=$(this).attr('id');
+            Selection(id);
+        });
+
+    });
+
+
+    function Selection(idRecipe_) {
+        $("#container").empty();
+        var Url = "/Home/getStepsFromId";
+        var Data = { idReceive: idRecipe_ };
+        console.log("clicked " + idRecipe_);
+
+        $.ajax({
+
+            type: "POST",
+            url: Url,
+            async: false,
+            data: Data,
+            success: function (data) {
+
+                console.log(data);
+                showData(data);
+                return;
+            },
+            error: function () {
+                console.log("error");
+                return;
+            }
+
+        });
+    }
+
+    function showData(data) {
+
+       
+        for (var i = 0; i < data.length; i++) {
+            var e = data[i];
+            var id = e.stepId;
+            var description = e.stepDescription;
+
+            appendToContainer(description);            
+        }
+
+        setTimeout(function () { appendToContainer("YOUR DRINK IS READY!"); }, 1000);
+        
+    }
+
+    function appendToContainer(string){
+        var template = ['<h1>' + string + ' </h1>'];
+        $("#container").append(template);
+    }
+
+
+
+</script>
+
+<div>
+
+    <h1> HI! SELECT YOUR DRINK!</h1>
+
+    @foreach (var item in Model)
+    {
+
+        <button id="@item.id" class="butt"> @item.name </button>
+
+
+    }
+
+    <div id="container">
+
+    </div>
+
+
+</div>
+
